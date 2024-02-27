@@ -1,6 +1,45 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
+import { useState } from "react";
+import Alerta from "../components/Alerta";
+import ClienteAxios from "../config/axios";
 
 const Login = () => {
+    const navigate = useNavigate();
+    const[datos, setDatos] = useState({
+        email : '',
+        password : ''
+    });
+    const[alerta, setAlerta] = useState({});
+
+    const guardarDatos = e =>{
+        setDatos({
+            ...datos,
+            [e.target.name] : e.target.value
+        })
+    }
+
+    const handleSubmit = async (e) =>{
+        e.preventDefault();
+        const{email, password} = datos;
+        if([email, password].includes('')){
+            setAlerta({mensaje: 'Todos los campos son obligatorios!' ,error:true})
+            return;
+        }
+
+        try {
+            const url = '/veterinarios/login'
+            const{data} =await ClienteAxios.post(url,datos);
+            localStorage.setItem('APV_token_auth', data.token);
+            setDatos({
+                email : '',
+                password : ''
+            })
+            navigate('/admin');
+        } catch (error) {
+            setAlerta({mensaje: error.response.data.msg, error:true});
+        }
+    }
+    const{mensaje} = alerta;
     return (
         <>
             <div>
@@ -10,7 +49,14 @@ const Login = () => {
             </div>
 
             <div className="mt-20 md:5 shadow-lg px-5 py-10 rounded-xl bg-white">
-                <form>
+
+                {mensaje && <Alerta
+                        alerta = {alerta}
+                    />    
+                }
+                <form
+                    onSubmit={handleSubmit}
+                >
                     <div className="my-5">
                         <label
                             className="uppercase text-gray-600 block text-xl font-bold"
@@ -20,6 +66,9 @@ const Login = () => {
                             type="email"
                             className="w-full border p-3 mt-3 bg-gray-50 rounded-xl"
                             placeholder="Email de Registro"
+                            name="email"
+                            value={datos.email}
+                            onChange={guardarDatos}
                         />
                     </div>
 
@@ -32,6 +81,9 @@ const Login = () => {
                             type="password"
                             className="w-full border p-3 mt-3 bg-gray-50 rounded-xl"
                             placeholder="Password"
+                            name="password"
+                            value={datos.password}
+                            onChange={guardarDatos}
                         />
                     </div>
 
