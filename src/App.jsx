@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import OlvidePassword from './pages/OlvidePassword';
 import Registrar from './pages/Registrar';
 import ConfirmarCuenta from './pages/ConfirmarCuenta';
+import NuevoPassword from './pages/NuevoPassword';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='/' element={<AuthLayout/>}>
           <Route index element={<Login/>}/>
           <Route path='reset-password' element={<OlvidePassword/>}/>
+          <Route path='reset-password/:token' element={<NuevoPassword/>}/>
           <Route path='registrar' element={<Registrar/>}/>
           <Route path='confirmar-cuenta/:id' element={<ConfirmarCuenta/>}/>
         </Route>
