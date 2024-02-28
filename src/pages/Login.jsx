@@ -2,6 +2,7 @@ import { Link, useNavigate} from "react-router-dom";
 import { useState } from "react";
 import Alerta from "../components/Alerta";
 import ClienteAxios from "../config/axios";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -17,6 +18,8 @@ const Login = () => {
             [e.target.name] : e.target.value
         })
     }
+
+    const{setAuth} = useAuth();
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
@@ -34,6 +37,8 @@ const Login = () => {
                 email : '',
                 password : ''
             })
+
+            setAuth(data);
             navigate('/admin');
         } catch (error) {
             setAlerta({mensaje: error.response.data.msg, error:true});

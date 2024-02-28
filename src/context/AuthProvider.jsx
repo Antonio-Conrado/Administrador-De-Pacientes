@@ -6,11 +6,15 @@ const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
     const[auth, setAuth] = useState({});
+    const [cargando, setCargando] = useState(true);//cargar la informacion antes de auth
 
     useEffect( ()=>{
         const autenticarUsuario = async ()=>{
             const token = localStorage.getItem('APV_token_auth');
-            if(!token) return
+            if(!token){
+                setCargando(false);
+                return
+            }
 
             const config = {
                 headers : {
@@ -25,16 +29,25 @@ const AuthProvider = ({children}) => {
             } catch (error) {
                 setAuth({});
             }
+
+            setCargando(false)
         };
 
         autenticarUsuario();
     },[]);
 
+    const cerrarSesion = ()=>{
+        localStorage.removeItem('APV_token_auth');
+        setAuth({});
+    };
+
     return ( 
         <AuthContext.Provider
             value={{
                 auth,
-                setAuth
+                cargando,
+                setAuth,
+                cerrarSesion
             }}
         >  
             {children}
@@ -47,7 +60,7 @@ AuthProvider.propTypes = {
 };
 
 export{
-    AuthProvider
+    AuthContext
 }
 
 
