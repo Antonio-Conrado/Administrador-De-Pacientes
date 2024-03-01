@@ -20,7 +20,7 @@ const Formulario = () => {
         });
     };
 
-    const { guardarPaciente} = usePacientes();
+    const { guardarPaciente } = usePacientes();
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -49,9 +49,10 @@ const Formulario = () => {
     const { mensaje } = alerta;
     return (
         <>
-            <p className="text-lg text-center mb-10">
-                Agrega tus pacientes y {''}
-                <span className="text-green-600 font-bold">Administralos</span>
+
+            <h2 className="font-black text-2xl text-center">Administrador de Pacientes</h2>
+            <p className='text-xl mt-5 mb-10 text-center'>Agrega tus pacientes y {''}
+                <span className='text-green-600 font-bold'>Administralos</span>
             </p>
 
             <form

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Formulario from "../../components/Formulario";
-// import ListadoPacientes from "../../components/ListadoPacientes";
+import ListadoPacientes from "../../components/ListadoPacientes";
 
 const AdministrarPacientes = () => {
     const [mostrarFormulario, setmostrarFormulario] = useState(false);
@@ -17,8 +17,8 @@ const AdministrarPacientes = () => {
                 <Formulario/>
             </div>
             
-            <div className="md:w-1/2  lg:w-2/5">
-                {/* <ListadoPacientes/> */}
+            <div className="md:w-1/2  lg:w-3/5">
+                <ListadoPacientes/>
             </div>
         </div>
     );
