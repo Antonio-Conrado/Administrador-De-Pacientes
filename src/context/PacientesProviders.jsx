@@ -6,13 +6,34 @@ const PacientesContext = createContext()
 
 const PacientesProvider = ({children}) => {
     const[pacientes, setpacientes] = useState([]);
+
+    useEffect( () =>{
+        const obtenerPacientes = async ()=>{
+            try {
+                const token = localStorage.getItem('APV_token_auth');
+                const config ={
+                    headers:{
+                        "Content-Type" : 'application/json',
+                        Authorization : `Bearer ${token}`
+                    }
+                };
+                const {data} = await ClienteAxios('/pacientes', config);
+                setpacientes(data);
+
+            } catch (error) {
+                console.log(error.response.data.msg);
+            }
+        };
+        obtenerPacientes();
+
+    },[]);
     
     const guardarPaciente = async( paciente) =>{
         try {  
             const token = localStorage.getItem('APV_token_auth');
             const config = {
                 headers:{
-                    "Content-type" : "application/json",
+                    "Content-Type" : "application/json",
                     Authorization : `Bearer ${token}`
                 }
             };
