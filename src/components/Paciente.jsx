@@ -1,14 +1,12 @@
+import usePacientes from '../hooks/usePacientes';
 import PropTypes from 'prop-types';
+import formatearFecha from '../helpers/formatearFecha';
 
 const Paciente = ({paciente}) => {
-    const{email, fechaAlta, nombre, propietario, sintomas, _id} = paciente;
+    const{email, fechaAlta, nombre, propietario, sintomas} = paciente;
     
-
-    //formatear fecha sin inmutar la fecha original
-    const formatearFecha = (fecha)=>{
-        const nuevaFecha = new Date(fecha);
-        return new Intl.DateTimeFormat('es-NI', {dateStyle: 'long'}).format(nuevaFecha);
-    };
+    const {setEdicion} = usePacientes();
+    
     return ( 
         <div className="mx-5 my-10 bg-white shadow-md px-5 py-10 rounded-xl">
             <p className="font-bold uppercase text-green-800  my-2">
@@ -40,6 +38,7 @@ const Paciente = ({paciente}) => {
                 <button
                     type='button'
                     className='py-2 px-10 bg-cyan-600 hover:bg-cyan-800 text-white rounded-md uppercase font-bold mb-2 md:mb-0'
+                    onClick={() => setEdicion(paciente)}
                 >Editar</button>
 
                 <button

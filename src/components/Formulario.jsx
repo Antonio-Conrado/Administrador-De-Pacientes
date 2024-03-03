@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Alerta from './Alerta';
 import usePacientes from "../hooks/usePacientes";
+import formatearFecha from "../helpers/formatearFecha";
 
 const Formulario = () => {
     const [datos, setDatos] = useState({
+        id: '',
         nombre: '',
         propietario: '',
         email: '',
         fechaAlta: '',
         sintomas: ''
     });
-
     const [alerta, setAlerta] = useState({});
 
     const guardarDatos = (e) => {
@@ -20,7 +21,22 @@ const Formulario = () => {
         });
     };
 
-    const { guardarPaciente } = usePacientes();
+    const { guardarPaciente , paciente} = usePacientes();
+    
+    useEffect( ()=>{
+        if(paciente?.nombre){
+
+            setDatos({
+                id : paciente._id,
+                nombre : paciente.nombre,
+                propietario : paciente.propietario,
+                email : paciente.email,
+                fechaAlta : formatearFecha(paciente.fechaAlta),
+                sintomas : paciente.sintomas
+            })
+        }
+        
+    }, [paciente]);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -34,10 +50,20 @@ const Formulario = () => {
             return;
         }
 
-        setAlerta({});
+        {paciente._id ?  
+            setAlerta({mensaje : 'Editado correctamente!'}) 
+            : 
+            setAlerta({mensaje : 'Guardado correctamente!'}
+        )}
+
+        setTimeout(() => {
+            setAlerta({});
+        }, 3000);
+
         guardarPaciente(datos);
 
         setDatos({
+            id : '',
             nombre: '',
             propietario: '',
             email: '',
@@ -145,7 +171,7 @@ const Formulario = () => {
                 <input
                     type="submit"
                     className="bg-cyan-600 hover:bg-cyan-800 w-48 mx-auto block text-white uppercase font-bold transition-colors cursor-pointer rounded-md p-3"
-                    value='Agregar Paciente'
+                    value={paciente._id ? 'Editar Paciente' :'Agregar Paciente'}
                 />
 
 

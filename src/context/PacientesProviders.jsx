@@ -6,6 +6,7 @@ const PacientesContext = createContext()
 
 const PacientesProvider = ({children}) => {
     const[pacientes, setpacientes] = useState([]);
+    const[paciente, setPaciente] = useState({});
 
     useEffect( () =>{
         const obtenerPacientes = async ()=>{
@@ -29,31 +30,54 @@ const PacientesProvider = ({children}) => {
     },[]);
     
     const guardarPaciente = async( paciente) =>{
-        try {  
-            const token = localStorage.getItem('APV_token_auth');
-            const config = {
-                headers:{
-                    "Content-Type" : "application/json",
-                    Authorization : `Bearer ${token}`
-                }
-            };
 
-            const { data } = await ClienteAxios.post('/pacientes', paciente, config);
+        const token = localStorage.getItem('APV_token_auth');
+        const config = {
+            headers:{
+                "Content-Type" : "application/json",
+                Authorization : `Bearer ${token}`
+            }
+        };
 
-            const{createdAt, updatedAt, __v, ...pacienteAlmacenado} = data;//crear un nuevo objeto omitiendo algunos campos
+        if(paciente.id){
+            try {
+                const {data} = await ClienteAxios.put(`/pacientes/${paciente.id}`, paciente, config);
 
-            setpacientes([pacienteAlmacenado, ...pacientes]);
+                const pacienteModificado = pacientes.map( pacienteState => pacienteState._id === data._id ? data : pacienteState);
             
-        } catch (error) {
-            console.log(error.response.data.msg)
+                setpacientes(pacienteModificado);
+                setPaciente({});
+                
+            } catch (error) {
+                console.log(error.response.data.msg);
+            }
+            
+        }else{
+            try {  
+                
+                const { data } = await ClienteAxios.post('/pacientes', paciente, config);
+
+                const{createdAt, updatedAt, __v, ...pacienteAlmacenado} = data;//crear un nuevo objeto omitiendo algunos campos
+                
+                setpacientes([pacienteAlmacenado, ...pacientes]);
+                
+            } catch (error) {
+                console.log(error.response.data.msg)
+            }
         }
+    };
+
+    const setEdicion = (paciente) =>{
+        setPaciente(paciente)
     };
 
     return (  
         <PacientesContext.Provider
             value={{
                 pacientes,
-                guardarPaciente
+                paciente,
+                guardarPaciente,
+                setEdicion
             }}
         >
 
