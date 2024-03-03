@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import formatearFecha from '../helpers/formatearFecha';
 
 const Paciente = ({paciente}) => {
-    const{email, fechaAlta, nombre, propietario, sintomas} = paciente;
+    const{email, fechaAlta, nombre, propietario, sintomas, _id} = paciente;
     
-    const {setEdicion} = usePacientes();
+    const {setEdicion, eliminarPaciente} = usePacientes();
     
     return ( 
         <div className="mx-5 my-10 bg-white shadow-md px-5 py-10 rounded-xl">
@@ -44,6 +44,7 @@ const Paciente = ({paciente}) => {
                 <button
                     type='button'
                     className='py-2 px-10 bg-red-600 hover:bg-red-800 text-white rounded-md uppercase font-bold'
+                    onClick={()=> eliminarPaciente(_id)}
                 >Eliminar</button>
 
             </div>
