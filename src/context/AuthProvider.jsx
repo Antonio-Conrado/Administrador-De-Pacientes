@@ -73,6 +73,36 @@ const AuthProvider = ({children}) => {
 
     }
 
+    const cambiarPassword = async datos =>{
+        const token = localStorage.getItem('APV_token_auth');
+        if(!token){
+            setCargando(false);
+            return;
+        }
+
+        const config = {
+            headers:{
+                "Content-Type" : "application/json",
+                Authorization : `Bearer ${token}`
+            }
+        };
+
+        try {
+            const url = '/veterinarios/actualizar-password';
+
+            const resultado = await ClienteAxios.put(url, datos, config);
+            return { 
+                mensaje : resultado.data.msg,
+                status : 200
+            }
+        } catch (error) {
+            return {
+                mensaje : error.response.data.msg,
+                error : true
+            };
+        }
+    }
+
     return ( 
         <AuthContext.Provider
             value={{
@@ -80,7 +110,8 @@ const AuthProvider = ({children}) => {
                 cargando,
                 setAuth,
                 cerrarSesion,
-                actualizarPerfil
+                actualizarPerfil,
+                cambiarPassword
             }}
         >  
             {children}

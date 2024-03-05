@@ -11,6 +11,7 @@ import Registrar from './pages/Registrar';
 import ConfirmarCuenta from './pages/ConfirmarCuenta';
 import NuevoPassword from './pages/NuevoPassword';
 import EditarPerfil from './pages/EditarPerfil';
+import CambiarPassword from './pages/CambiarPassword';
 
 import AdministrarPacientes from './pages/Admin/AdministrarPacientes';
 
@@ -34,6 +35,7 @@ function App() {
             <Route path='/admin' element={<AdminLayout />}>
               <Route index element={<AdministrarPacientes />} />
               <Route path="perfil" element={<EditarPerfil />} />
+              <Route path='cambiar-password' element={<CambiarPassword/>} />
 
 
             </Route>
