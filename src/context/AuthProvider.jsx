@@ -41,13 +41,46 @@ const AuthProvider = ({children}) => {
         setAuth({});
     };
 
+    const actualizarPerfil = async (datos) =>{
+        const token = localStorage.getItem('APV_token_auth');
+        if(!token){
+            setCargando(false);
+            return;
+        }
+
+        const config = {
+            headers:{
+                "Content-Type" : "application/json",
+                Authorization : `Bearer ${token}`
+            }
+        };
+
+        try {
+            const url = `/veterinarios/perfil/${datos._id}`;
+
+            const  {data } =await ClienteAxios.put(url, datos, config);
+            console.log(data)
+
+            return { 
+                mensaje : 'Perfil Actualizado correctamente!'
+            }
+        } catch (error) {
+            return {
+                mensaje : error.response.data.msg,
+                error : true
+        };
+        }
+
+    }
+
     return ( 
         <AuthContext.Provider
             value={{
                 auth,
                 cargando,
                 setAuth,
-                cerrarSesion
+                cerrarSesion,
+                actualizarPerfil
             }}
         >  
             {children}
