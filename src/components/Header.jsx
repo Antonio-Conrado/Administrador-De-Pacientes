@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import usePacientes  from "../hooks/usePacientes";
 
 const Header = () => {
     const{cerrarSesion} = useAuth();
+    const{setpacientes} = usePacientes();
+    const handleCerrarSesion = ()=>{
+        setpacientes([]);
+        cerrarSesion();
+    }
     return (
         <header className="py-10 bg-cyan-600">
             <div className="container mx-auto flex flex-col  lg:flex-row justify-between items-center">
@@ -16,7 +22,7 @@ const Header = () => {
                     <button
                         type="button"
                         className="text-white text-sm font-bold"
-                        onClick={cerrarSesion}
+                        onClick={handleCerrarSesion}
                     >Cerrar Sesión</button>
                 </nav>
 
